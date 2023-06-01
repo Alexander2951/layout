@@ -70,41 +70,60 @@
       //   field.style.borderColor = "red";
       //   alert(`Заполните поле ${field}`);
       // }
+      function validateInputs() {
+        inputsFields.forEach(function (input) {
+          if (input.value.trim() === "") {
+            input.classList.add("error");
+            input.style.borderWidth = "4px";
+            input.style.borderColor = "red";
+            localStorage.setItem(input.id, "error"); //сохраняем класс ошибки в localStorage
+          } else {
+            input.classList.remove("error");
+            input.style.borderWidth = "";
+            input.style.borderColor = "";
+          }
+        });
+      }
+      //При загрузке страницы проверяем Local Storage  и применяем классы ошибки
+      window.addEventListener("load", function () {
+        inputsFields.forEach(function (input) {
+          if (localStorage.getItem(input.id) === "error") {
+            input.classList.add("error");
+            input.style.borderWidth = "4px";
+            input.style.borderColor = "red";
+          }
+        });
+      });
       const BtnsEl = document.querySelectorAll("button");
       const sendBtn = BtnsEl[1];
       const inputsFields = document.querySelectorAll(".form-control");
 
-      sendBtn.addEventListener("click", () => {
-        if (inputsFields[0].value.length == 0) {
-          inputsFields[0].classList.add("error");
-          inputsFields[0].style.borderWidth = "4px";
-          inputsFields[0].style.borderColor = "red";
-          alert("Заполните первый инпут");
+      sendBtn.addEventListener("click", function (event) {
+        event.preventDefault(); //Предотвращаем отправку формы
+        validateInputs();
+        if (document.querySelector(".form-control.error")) {
+          alert("Пожалста заполните все обязательные поля");
+          return;
+        }
+      }); /*Если все поля заполнены, отправка формы продолжится
+        Выполните здесь необходимые действия*/
 
-          // switch (spaceField) {
-          //   case inputsFields[0]:
-          //     console.log(inputsFields[0]);
-          //     inputsFields[0].errorPanic(inputsFields[0]);
-          //     break;
-          //   case inputsFields[1]:
-          //     console.log(inputsFields[1]);
-          //     inputsFields[1].errorPanic(inputsFields[0]);
-          //     break;
-          //   case input:
-          //     console.log(input);
-          //     input.errorPanic(input);
-          //     break;
-          //   default:
-          //     //document.querySelector(".error").classList.remove("error");
-          //     break;
-        }
-        if (inputsFields[1].value.length == 0) {
-          inputsFields[1].classList.add("error");
-          inputsFields[1].style.borderWidth = "4px";
-          inputsFields[1].style.borderColor = "red";
-          alert("Заполните второй инпут");
-        }
-      });
+      // switch (spaceField) {
+      //   case inputsFields[0]:
+      //     console.log(inputsFields[0]);
+      //     inputsFields[0].errorPanic(inputsFields[0]);
+      //     break;
+      //   case inputsFields[1]:
+      //     console.log(inputsFields[1]);
+      //     inputsFields[1].errorPanic(inputsFields[0]);
+      //     break;
+      //   case input:
+      //     console.log(input);
+      //     input.errorPanic(input);
+      //     break;
+      //   default:
+      //     //document.querySelector(".error").classList.remove("error");
+      //     break;
     </script>
   </body>
 </html>
